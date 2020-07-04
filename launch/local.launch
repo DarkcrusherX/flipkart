@@ -17,13 +17,6 @@
         <arg name="vehicle" value="$(arg vehicle)"/>
     </include>
     <arg name="ID" value="0"/>  
-    <!-- Launch MavROS -->
-        <!-- <include file="$(find mavros)/launch/px4.launch">
-            <arg name="fcu_url" value="udp://:14540@localhost:14580"/>
-            <arg name="gcs_url" value=""/>
-            <arg name="tgt_system" value="$(eval 1 + arg('ID'))"/>
-            <arg name="tgt_component" value="1"/>
-        </include> -->
     <include file="$(find mavros)/launch/node.launch">
         <arg name="pluginlists_yaml" value="$(find mavros)/launch/px4_pluginlists.yaml" />
         <!-- Need to change the config file to get the tf topic and get local position in terms of local origin -->
@@ -44,11 +37,8 @@
     <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" output="screen"
           args="-sdf -database $(arg model) -model $(arg vehicle)">
     </node>
-
-    <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" /> -->
-
     <!-- Transforms -->
-    <node pkg="tf" type="static_transform_publisher" name="world_odom_broadcaster" args="0 0 0 0 0 0 1 map base_link 100" />
+    <!-- <node pkg="tf" type="static_transform_publisher" name="world_odom_broadcaster" args="0 0 0 0 0 0 1 map base_link 100" /> -->
     <node pkg="tf" type="static_transform_publisher" name="camera_link_odom" args="0 0 0 0 0 0 1 base_link camera_link 100" />
 
 

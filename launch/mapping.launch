@@ -50,7 +50,7 @@
       <param name="slice_level" value="1.0" />
       <param name="publish_slices" value="true" />
 
-      <param name="local_frame_id" value="$(arg frame_id)" />
+      <param name="local_frame_id" value="base_link" />
       <param name="world_frame" value="map" />
       <param name="replan_dt" value="0.25" />
       <param name="command_publishing_dt" value="0.25" />

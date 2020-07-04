@@ -41,7 +41,7 @@ def main1():
     attitude = AttitudeTarget()
     attitude.type_mask = 3
     attitude.header = msg.header 
-    attitude.header.frame_id = 'base_link'
+    # attitude.header.frame_id = 'FRAME_LOCAL_NED'
     # quaternion = tf.transformations.quaternion_from_euler(msg.roll,msg.pitch, 0)
     # attitude.orientation.x = quaternion[0]
     # attitude.orientation.y = quaternion[1]
@@ -50,7 +50,7 @@ def main1():
     attitude.orientation = Quaternion(*tf_conversions.transformations.quaternion_from_euler(msg.roll, msg.pitch, 0))
 
     attitude.body_rate.z = msg.yaw_rate
-    t = msg.thrust.z/100
+    t = msg.thrust.z/15
     if t>1:
         t=1
     elif t<-1:
