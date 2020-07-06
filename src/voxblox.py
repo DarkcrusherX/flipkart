@@ -50,7 +50,7 @@ def main1():
     attitude.orientation = Quaternion(*tf_conversions.transformations.quaternion_from_euler(msg.roll, msg.pitch, 0))
 
     attitude.body_rate.z = msg.yaw_rate
-    t = msg.thrust.z/15
+    t = msg.thrust.z/100
     if t>1:
         t=1
     elif t<-1:

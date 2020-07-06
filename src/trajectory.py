@@ -29,7 +29,8 @@ def callback(data):
     global msg
 
     msg = data
-    print(msg)
+    # print(len(msg.points))
+    print("call back received")
 
 def callback_pos(pos):
 
@@ -39,21 +40,22 @@ def callback_pos(pos):
 def calc_dist(trajectory,current_position):
     x1= trajectory.pose.position.x
     y1 = trajectory.pose.position.y
-    z1 = trajectory.pose.position.z
+    # z1 = trajectory.pose.position.z
     x2= current_position.pose.position.x
     y2= current_position.pose.position.y
-    z2= current_position.pose.position.z
+    # z2= current_position.pose.position.z
 
 
-    dist = (x1-x2)**2 + (y1-y2)**2 + (z1-z2)**2
+    dist = (x1-x2)**2 + (y1-y2)**2
     return dist
 
-
+rospy.Subscriber('/mav_local_planner/full_trajectory',MultiDOFJointTrajectory,callback)
 def main(i):
+    global msg
     # global setpoint
     # setpoint_pub = rospy.Publisher('/waypoint', PoseStamped,queue_size=10)
     # setpoint_pub.publish(setpoint)
-    rospy.Subscriber('/mav_local_planner/full_trajectory',MultiDOFJointTrajectory,callback)
+    # rospy.Subscriber('/mav_local_planner/full_trajectory',MultiDOFJointTrajectory,callback)
 
     publish = rospy.Publisher('/mavros/setpoint_position/local', PoseStamped,queue_size=10)
 
@@ -61,14 +63,16 @@ def main(i):
 
     trajectory.pose.position = msg.points[i].transforms[0].translation
     trajectory.pose.orientation = msg.points[i].transforms[0].rotation
+    trajectory.pose.position.z = 3
 
     rospy.Subscriber('/mavros/local_position/pose',PoseStamped,callback_pos)
 
     dist =  calc_dist(trajectory,current_position)
+    print(" Dist new : {}".format(dist))
     print(i)
-    print(dist)
+    # print(dist)
     rate = rospy.Rate(10)
-    while dist > 0.1:
+    while dist > 0.0005:
 
         rate.sleep()
         rospy.Subscriber('/mavros/local_position/pose',PoseStamped,callback_pos)
@@ -77,15 +81,25 @@ def main(i):
         trajectory.pose.position = msg.points[i].transforms[0].translation
         trajectory.pose.orientation = msg.points[i].transforms[0].rotation
         print("trajectory")
-        print(trajectory)
-        # print(" Dist new : {}".format(dist))
+        print(i)
+        print(" Dist : {}".format(dist))
         publish.publish(trajectory)
 
 
 
-    if dist <1 :
+    if dist <0.0005 and i<(len(msg.points)-1):
         i = i+1
         main(i)
+    elif dist <0.0005 and i>=len(msg.points):
+        i=0
+        msg =0
+        while msg==0:
+            rospy.Subscriber('/mav_local_planner/full_trajectory',MultiDOFJointTrajectory,callback)
+            print("no hope")
+        print("msg not zero")
+        print(msg)
+        main(i)
+
 
 if __name__ == '__main__':
      try:
