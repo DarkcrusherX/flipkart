@@ -11,6 +11,9 @@
     <arg name="vehicle" default="iris_obs_avoid"/>
 
     <param name="use_sim_time" value="true" />
+    <param name="thrust_scaling_factor" value="0.1" />
+    <param name="system_mass_kg" value="0.15" />
+    <param name="yaw_rate_scaling_factor" value="1.0" />
 
     <!-- Launch PX4 SITL -->
     <include file="$(find px4)/launch/px4.launch">
@@ -25,6 +28,9 @@
         <arg name="gcs_url" value="$(arg gcs_url)" />
         <arg name="tgt_system" value="$(arg tgt_system)" />
         <arg name="tgt_component" value="$(arg tgt_component)" />
+        <!-- <arg name="thrust_scaling_factor" value="0.1" />
+        <arg name="system_mass_kg" value="0.15" />
+        <arg name="yaw_rate_scaling_factor" value="1.0" /> -->
     </include>
 
     <!-- Launch Gazebo -->
@@ -39,7 +45,8 @@
     </node>
     <!-- Transforms -->
     <!-- <node pkg="tf" type="static_transform_publisher" name="world_odom_broadcaster" args="0 0 0 0 0 0 1 map base_link 100" /> -->
-    <node pkg="tf" type="static_transform_publisher" name="camera_link_odom" args="0 0 0 0 0 0 1 base_link camera_link 100" />
+    <node pkg="tf" type="static_transform_publisher" name="camera_link_base" args="0 0 0 0 0 0 1 base_link camera_link 100" />
+     <node pkg="tf" type="static_transform_publisher" name="map_odom" args="0 0 0 0 0 0 1 odom map 100" />
 
 
   <!-- Mapping and Planning -->
