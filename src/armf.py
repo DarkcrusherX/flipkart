@@ -29,7 +29,7 @@ class armtakeoff():
         pose = PoseStamped()
         pose.pose.position.x = 0
         pose.pose.position.y = 0
-        pose.pose.position.z = 2
+        pose.pose.position.z = 3.55
 
         prev_state = self.current_state
         rate = rospy.Rate(20.0) # MUST be more then 2Hz
@@ -76,12 +76,12 @@ class armtakeoff():
         pose = PoseStamped()
         pose.pose.position.x = 0
         pose.pose.position.y = 0
-        pose.pose.position.z = 3
+        pose.pose.position.z = 3.55
 
         while pose.pose.position.z-0.1 > self.current_pos.pose.position.z:
             now = rospy.get_rostime()
             # print(self.current_pos.pose.position.z)
-            pose.pose.position.z = 3
+            pose.pose.position.z = 3.55
             self.local_pos_pub.publish(pose)
 
 

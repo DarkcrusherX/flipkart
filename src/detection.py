@@ -9,7 +9,7 @@ import numpy as np
 bridge = CvBridge()
 rospy.init_node('opencv_example', anonymous=True)
 
-mid_pub = rospy.Publisher('midpoints', detection,queue_size=10)
+mid_pub = rospy.Publisher('cvmsg', detection,queue_size=10)
 midpoint = detection()
 
 def show_image(frame):
