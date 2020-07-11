@@ -33,21 +33,24 @@ def show_image(frame):
     cv.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
     cv.circle(frame, (x + int(w*0.5), y + int(h*0.5)), 4, (0,0,255), -1) #locates the center of bounding box
     print(x + int(w * 0.5), y + int(h * 0.5))  #center of the bounding box
-    # print("length : {}".format(w))
-    # print("breadth : {}".format(h))
-    print(h/w)
-    if 1< h/w <5:                                #raandom values
+    print("length : {}".format(w))
+    print("breadth : {}".format(h))
+    # print(h/w)
+    # if 1< h/w <5:                                #raandom values      onli if whole hoop is yellow , else peace
 
-      midpoint.x = x + int(w * 0.5)
-      midpoint.y = y + int(h * 0.5)
-      midpoint.length = w
-      midpoint.breadth = h
-    else:
-      midpoint.x = 0
-      midpoint.y = 0
-      midpoint.length = 0
-      midpoint.breadth = 0     
-
+    #   midpoint.x = x + int(w * 0.5)
+    #   midpoint.y = y + int(h * 0.5)
+    #   midpoint.length = w
+    #   midpoint.breadth = h
+    # else:
+    #   midpoint.x = 0
+    #   midpoint.y = 0
+    #   midpoint.length = 0
+    #   midpoint.breadth = 0     
+    midpoint.x = x + int(w * 0.5)
+    midpoint.y = y + int(h * 0.5)
+    midpoint.length = w
+    midpoint.breadth = h
   mid_pub.publish(midpoint)
   # img = cv.cvtColor(frame, cv.COLOR_BGR2RGB)  
   cv.imshow("Image Window",frame)
