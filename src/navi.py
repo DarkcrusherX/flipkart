@@ -38,7 +38,7 @@ def cvfunction():
         else:
             global i
             t0=rospy.Time.now().to_sec()
-            while rospy.Time.now().to_sec()-t0 < 2:
+            while rospy.Time.now().to_sec()-t0 < 2:                                   # its enough i think
                 if i%2 == 0:
                     current_position.pose.position.y = 1
                 else:
@@ -52,15 +52,15 @@ def cvfunction():
 def navigation():
     publish_vel = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel', TwistStamped,queue_size=10)
 
-    while bbox.x > xpixel/2 +15 or bbox.x < xpixel/2 -15 : 
-        error = bbox.x - xpixel/2
+    while bbox.x > xpixel/2 +10 or bbox.x < xpixel/2 -10 : 
+        error = -bbox.x + xpixel/2
         vel.twist.linear.y = 0.001*error
         publish_vel.publish(vel)
-        print("alligning")
-    vel.twist.linear.x = 2
-    while True:
+        print("alligning error: {}".format(error))
+    vel.twist.linear.x = 1
+    t1=rospy.Time.now().to_sec()
+    while rospy.Time.now().to_sec()-t1 < 10:                             # for trial onli
         publish_vel.publish(vel)
-
 
 if __name__ == '__main__':
      try:
