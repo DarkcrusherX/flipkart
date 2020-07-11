@@ -15,6 +15,7 @@ bbox = detection()
 setpoint = PoseStamped()
 current_position = PoseStamped()
 vel = TwistStamped()
+i=0
 
 def cvcallback(cv_msg):
 
@@ -32,10 +33,10 @@ def cvfunction():
         rospy.Subscriber('cvmsg',detection,cvcallback)
         rospy.Subscriber('/mavros/local_position/pose',PoseStamped,callback_pos)
         bbox.y = bbox.y - 1.5*bbox.breadth/3.5
-        if ypixel/2 - 30 < bbox.y < ypixel/2 + 30:
+        if ypixel/2 - 15 < bbox.y < ypixel/2 + 15:
             navigation()
         else:
-            i=0
+            global i
             t0=rospy.Time.now().to_sec()
             while rospy.Time.now().to_sec()-t0 < 2:
                 if i%2 == 0:
@@ -43,15 +44,15 @@ def cvfunction():
                 else:
                     current_position.pose.position.y = -1
 
-            print("no proper detection : {}".format(bbox.y-240))
-            current_position.pose.position.z = 3.5
-            setpoint_pub.publish(current_position)
+                print("no proper detection : {}".format(bbox.y-240))
+                current_position.pose.position.z = 3.5
+                setpoint_pub.publish(current_position)
             i = i+1
 
 def navigation():
     publish_vel = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel', TwistStamped,queue_size=10)
 
-    while bbox.x > xpixel/2 +30 and bbox.y < xpixel/2 -30 : 
+    while bbox.x > xpixel/2 +15 or bbox.x < xpixel/2 -15 : 
         error = bbox.x - xpixel/2
         vel.twist.linear.y = 0.001*error
         publish_vel.publish(vel)
