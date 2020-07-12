@@ -47,20 +47,22 @@ def cvfunction():
                 else:
                     current_position.pose.position.y = -1
 
+                if ypixel/2 - 15 < bbox.y < ypixel/2 + 15:
+                    navigation()
+
                 print("no proper detection : {}".format(bbox.y-240))
                 current_position.pose.position.z = 3.4
+                current_position.pose.orientation.w =1
                 setpoint_pub.publish(current_position)
             i = i+1
 
 def navigation():
     publish_vel = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel', TwistStamped,queue_size=10)
 
-    while bbox.x > xpixel/2 + 3 or bbox.x < xpixel/2 - 3 : 
-        rospy.Subscriber('/mavros/local_position/pose',PoseStamped,callback_pos)
+    while bbox.x > xpixel/2 + 1 or bbox.x < xpixel/2 - 1 : 
+
         error = -bbox.x + xpixel/2
         vel.twist.linear.y = 0.003*error
-        if current_position.pose.position.z <3.4:
-            vel.twist.linear.z = 0.1
         publish_vel.publish(vel)
         print("alligning error: {}".format(error))
 
