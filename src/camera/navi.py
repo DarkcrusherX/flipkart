@@ -15,6 +15,7 @@ ypixel = 480
 fovx = 1.047
 
 bbox = detection()
+oldbbox = detection()
 setpoint = PoseStamped()
 current_position = PoseStamped()
 vel = TwistStamped()
@@ -31,11 +32,14 @@ def callback_pos(pos):
     current_position = pos
 
 def cvfunction():
+    global bbox
+    global oldbbox
     while True:
         setpoint_pub = rospy.Publisher('/mavros/setpoint_position/local', PoseStamped,queue_size=10)
         rospy.Subscriber('cvmsg',detection,cvcallback)
         rospy.Subscriber('/mavros/local_position/pose',PoseStamped,callback_pos)
         # bbox.y = bbox.y - 1.5*bbox.breadth/3.5         Just in case if whole hoop is yellow
+        oldbbox = bbox
         if ypixel/2 - 15 < bbox.y < ypixel/2 + 15:
             navigation()
         else:
@@ -58,8 +62,8 @@ def cvfunction():
 
 def navigation():
     publish_vel = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel', TwistStamped,queue_size=10)
-
-    while bbox.x > xpixel/2 + 1 or bbox.x < xpixel/2 - 1 : 
+    
+    while bbox.x > xpixel/2 + 2 or bbox.x < xpixel/2 - 2 : 
 
         error = -bbox.x + xpixel/2
         vel.twist.linear.y = 0.003*error
@@ -68,15 +72,25 @@ def navigation():
 
     vel.twist.linear.x = 1
 
-    distance = xpixel**2 /(1000*math.tan(fovx/2)*bbox.length)
-
-    # distance = (bbox.length*xpixel)/(1000*math.tan(fovx/2)) + 0.5
+    distance = xpixel**2 /(1000*math.tan(fovx/2)*bbox.length) + 0.3
+    oldbbox = bbox
 
     time = distance/vel.twist.linear.x
     t1=rospy.Time.now().to_sec()
-    while rospy.Time.now().to_sec()-t1 < time:                             # for trial onli
+    print("time required to go to 0.3m from hoop : {}".format(time))
+
+    while rospy.Time.now().to_sec()-t1 < time:                                                          # for trial onli
+        if bbox.length > oldbbox.length and bbox.breadth > oldbbox.length:
+            rospy.Subscriber('cvmsg',detection,cvcallback)
+            print("realligning : {}".format(error))
+            errorx = -bbox.x + xpixel/2
+            vel.twist.linear.y = 0.013*errorx                        # need to readjust this value , this is the most important value in this code.
+            errory = -bbox.y + ypixel/2
+            vel.twist.linear.z = 0.008*errory                        # need to readjust this value , height may be wrong bcz of some t265 turbulance
         publish_vel.publish(vel)
-        print("time required to go to 0.5m from hoop : {}".format(time))
+        vel.twist.linear.y = 0
+        vel.twist.linear.z = 0
+
     vel.twist.linear.x = 0
 
 if __name__ == '__main__':
