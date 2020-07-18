@@ -16,6 +16,7 @@ def cvcallback(cv_msg):
   # print(bbox)
 
 def show_image(frame):
+  frame= frame*10                                                         # for representation
   cv.waitKey(1)
   cv.namedWindow("depth Image Window",cv.WINDOW_NORMAL)
   rospy.Subscriber('cvmsg',detection, cvcallback)
@@ -26,7 +27,8 @@ def show_image(frame):
   w = bbox.length
 
   value = frame[int(x)][int(y)]
-  cv.rectangle(frame,(int(x-w/2),int(y-h/2)),(int(x+w/2),int(y+h/2)),(0, 0, 255), 2,1)
+  print(len(frame))
+  cv.rectangle(frame,(int(x-w/2),int(y-h/2)),(int(x+w/2),int(y+h/2)),(255, 255, 255), 2,1)
 
   print("DEpth Value: {}".format(value))
 
@@ -35,7 +37,7 @@ def show_image(frame):
 
 
 def image_callback(img_msg):
-  cv_image = dbridge.imgmsg_to_cv2(img_msg, "passthrough")
+  cv_image = dbridge.imgmsg_to_cv2(img_msg,"8UC1")
   show_image(cv_image)   
 
 sub_image = rospy.Subscriber("/camera/depth/image_raw", Image, image_callback)

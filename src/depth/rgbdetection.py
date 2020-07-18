@@ -17,6 +17,7 @@ def show_image(frame):
   lower = np.array([20, 100, 100])                                                               #hsv limits vary based on hoops yellow
   upper = np.array([30, 255, 255])
 
+
   frame_HSV = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
   mask = cv.inRange(frame_HSV, lower, upper)
   mask_Open = cv.morphologyEx(mask, cv.MORPH_OPEN, np.ones((10, 10)))

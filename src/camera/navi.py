@@ -38,14 +38,14 @@ def cvfunction():
         setpoint_pub = rospy.Publisher('/mavros/setpoint_position/local', PoseStamped,queue_size=10)
         rospy.Subscriber('cvmsg',detection,cvcallback)
         rospy.Subscriber('/mavros/local_position/pose',PoseStamped,callback_pos)
-        # bbox.y = bbox.y - 1.5*bbox.breadth/3.5         Just in case if whole hoop is yellow
+        # bbox.y = bbox.y - 1.5*bbox.breadth/3.5                                          Just in case if whole hoop is yellow
         oldbbox = bbox
         if ypixel/2 - 15 < bbox.y < ypixel/2 + 15:
             navigation()
         else:
             global i
-            t0=rospy.Time.now().to_sec()
-            while rospy.Time.now().to_sec()-t0 < 2:                                   # its enough i think
+            t0=rospy.Time.now().to_sec()                                                   # To just wander left and ri8 to get a detection
+            while rospy.Time.now().to_sec()-t0 < 2:                                        # its enough i think 
                 if i%2 == 0:
                     current_position.pose.position.y = 1
                 else:
@@ -63,16 +63,16 @@ def cvfunction():
 def navigation():
     publish_vel = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel', TwistStamped,queue_size=10)
     
-    while bbox.x > xpixel/2 + 2 or bbox.x < xpixel/2 - 2 : 
+    while bbox.x > xpixel/2 + 2 or bbox.x < xpixel/2 - 2 :                              # Depends on the distance actually, if large distance then error of 1 even not sufficient.
 
         error = -bbox.x + xpixel/2
-        vel.twist.linear.y = 0.003*error
+        vel.twist.linear.y = 0.003*error                                                # need to readjust , this also very much determines but greatly gets affected bcz of pixel scaling
         publish_vel.publish(vel)
         print("alligning error: {}".format(error))
 
-    vel.twist.linear.x = 1
+    vel.twist.linear.x = 1                                                               # need to change velocity according to tolerable error
 
-    distance = xpixel**2 /(1000*math.tan(fovx/2)*bbox.length) + 0.3
+    distance = xpixel**2 /(1000*math.tan(fovx/2)*bbox.length) + 0.3                      # Giving boost until it get pass 0.3m from the hoop
     oldbbox = bbox
 
     time = distance/vel.twist.linear.x
