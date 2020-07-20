@@ -32,10 +32,12 @@ def localization():
 
 
     print(" ")
-    right_max = 120
-    right_min = 60
-    left_max = 300
-    left_min = 240 
+    right_max = 120 - int(np.degrees(yaw))
+    right_min = 60 - int(np.degrees(yaw))
+    left_max = 300 - int(np.degrees(yaw))
+    left_min = 240 - int(np.degrees(yaw))
+
+    print("limits right : {0}  {1}".format(right_max , right_min))
 
     left_angles = []
     right_angles = []    
@@ -61,7 +63,7 @@ def localization():
     yr = right_lidar*np.sin(right_angles*np.pi/180)
 
     slxy = np.dot(xl,yl.T) - np.average(xl)*np.average(yl)*(left_max-left_min)
-    slxx = np.dot(xl,xl.T) - np.average(xl)**2*(left_max-left_min)
+    slxx = np.dot(xl,xl.T) - np.average(xl)*np.average(xl)*(left_max-left_min)
 
     m_l = slxy/slxx
     c_l = np.average(yl) - m_l*np.average(xl)
@@ -78,13 +80,19 @@ def localization():
     pr = c_r/math.sqrt(1+m_r**2)
     ar = -math.tanh(m_r)*180/math.pi
 
-    p = pr+pl/2
+    p = pr-pl
     a = ar+al/2
+
+    # print("slope left :{} ".format(m_l))
+    # print("slope right :{} ".format(m_r))
+    # print("constant left : {}".format(c_l))
+    # print("constant right: {}".format(c_r))
 
     print("mavros yaw : {}".format(np.degrees(yaw)))
     print("lidar yaw : {}".format(a))
-    # print(m_l)
-    # print(c_l)
+
+    print(pr)
+    print(p)
 
 
 if __name__ == '__main__':
