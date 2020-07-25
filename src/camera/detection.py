@@ -22,7 +22,7 @@ def show_image(frame):
   mask_Open = cv.morphologyEx(mask, cv.MORPH_OPEN, np.ones((10, 10)))
   mask_Close = cv.morphologyEx(mask_Open, cv.MORPH_CLOSE, np.ones((20, 20))) #to reduce noise and get smooth image
   mask_Perfect = mask_Close
-  conts, h = cv.findContours(mask.copy(), cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE) # detects contours
+  _,conts, h = cv.findContours(mask.copy(), cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE) # detects contours
   
   for c in conts:  #creates bounding boxes around the detected hoop
     # Find the index of the largest contour
