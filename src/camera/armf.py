@@ -76,13 +76,28 @@ class armtakeoff():
         pose = PoseStamped()
         pose.pose.position.x = 0
         pose.pose.position.y = 0
-        pose.pose.position.z = 3.55
+        pose.pose.position.z = 3.27
 
         while pose.pose.position.z-0.1 > self.current_pos.pose.position.z:
             now = rospy.get_rostime()
             # print(self.current_pos.pose.position.z)
-            pose.pose.position.z = 3.55
+            pose.pose.position.z = 3.27
             self.local_pos_pub.publish(pose)
+
+    def takeoff1(self):
+        pose = PoseStamped()
+        pose.pose.position.x = 0
+        pose.pose.position.y = 0
+        pose.pose.position.z = 3
+        # self.local_pos_pub.publish(pose)
+
+        last = rospy.get_rostime()
+
+        while True:
+            if rospy.get_rostime() - last >= rospy.Duration(0.05):
+                pose.pose.position.z = 3
+                self.local_pos_pub.publish(pose)
+                last = rospy.get_rostime()
 
 
     def disarm(self):
