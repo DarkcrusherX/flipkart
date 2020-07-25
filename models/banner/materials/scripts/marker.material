@@ -1,0 +1,13 @@
+material flipkart/banner{
+    technique
+    {
+        pass
+        {
+            texture_unit
+            {
+                texture flipkart.jpg
+                scale 1.0 1.0
+            }
+        }   
+    }
+}
