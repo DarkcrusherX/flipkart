@@ -9,9 +9,16 @@ from armf import armtakeoff
 
 rospy.init_node('navigation',anonymous=True)
 i=0
+current_position = PoseStamped()
+
+def callback_pos(pos):
+
+    global current_position
+    current_position = pos
 
 def main() :
     while True:
+        rospy.Subscriber('/mavros/local_position/pose',PoseStamped,callback_pos)
         local_pos_pub = rospy.Publisher('/mavros/setpoint_position/local', PoseStamped, queue_size=10)
 
         pose = PoseStamped()
@@ -24,11 +31,14 @@ def main() :
                 pose.pose.position.y = 1
             else:
                 pose.pose.position.y = -1
-
-            pose.pose.position.z = 3.27
+            if current_position.pose.position.z > 3.3:
+                pose.pose.position.z = 3.27
+            elif current_position.pose.position.z < 3.25:
+                pose.pose.position.z = 3.3   
             pose.pose.orientation.w =1
             local_pos_pub.publish(pose) 
         i = i+1
+
 
 
 if __name__ == '__main__':
