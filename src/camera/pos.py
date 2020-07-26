@@ -31,10 +31,11 @@ def main() :
                 pose.pose.position.y = 1
             else:
                 pose.pose.position.y = -1
-            if current_position.pose.position.z > 3.3:
-                pose.pose.position.z = 3.27
-            elif current_position.pose.position.z < 3.25:
-                pose.pose.position.z = 3.3   
+            # if current_position.pose.position.z > 3.28:
+            #     pose.pose.position.z = 3.27
+            # elif current_position.pose.position.z < 3.27:
+            #     pose.pose.position.z = 3.28 
+            pose.pose.position.z = 3.27  
             pose.pose.orientation.w =1
             local_pos_pub.publish(pose) 
         i = i+1
