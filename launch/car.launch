@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="world" default="$(find flipkart)/worlds/flipkart.world"/>
+    <!-- gazebo configs -->
+    <arg name="gui" default="true"/>
+    <arg name="debug" default="false"/>
+    <arg name="verbose" default="false"/>
+    <arg name="paused" default="false"/>
+    <arg name="respawn_gazebo" default="false"/>
+
+    <!-- Gazebo sim -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="gui" value="$(arg gui)"/>
+        <arg name="world_name" value="$(arg world)"/>
+        <arg name="debug" value="$(arg debug)"/>
+        <arg name="verbose" value="$(arg verbose)"/>
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="respawn_gazebo" value="$(arg respawn_gazebo)"/>
+    </include>
+
+    	<!-- Load the URDF into the parameter server -->
+	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find flipkart)/models/irpaan_depth_cam_car.urdf.xacro'" />
+	<!-- Spin up the node that will spawn the robot model is defined in the URDF -->
+	<node 
+		name="spawn_gazebo_model" 
+		pkg="gazebo_ros" 
+		type="spawn_model" 
+		args="-urdf -param robot_description -model car -x 0.3 -y 1 -z 0.779"
+        output="screen"   
+	/> 
+
+	<rosparam command="load" file="$(find flipkart)/config/controller.yaml" />
+  	<node name="controller_spawner" pkg="controller_manager" type="spawner" args="robot_joint_publisher robot_velocity_controller"/>
+
+	  <!-- Robot state publisher -->
+	<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+		<param name="publish_frequency" type="double" value="50.0" />
+		<param name="tf_prefix" type="string" value="" />
+	</node>
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    
+</launch>

@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<robot name="irpaan_car" xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:include filename="$(find flipkart)/models/irpaan_car.urdf.xacro" />
+    <xacro:include filename="$(find flipkart)/models/realsense/realsense-RS200.macro.xacro"/>
+
+    <!-- <joint name="cam_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="rs200_camera"/>
+        <origin rpy="0 0 1.0" xyz="0 0 0"/>
+    </joint>  -->
+    <xacro:realsense-rs200 prefix="" parent="base">
+        <origin xyz="0.5 0 1.5" rpy="0 0 0" />   
+    </xacro:realsense-rs200>
+    
+</robot>
