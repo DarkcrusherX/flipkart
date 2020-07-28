@@ -5,7 +5,7 @@
     <!-- vehicle pose -->
     <arg name="x" default="0.5"/>
     <arg name="y" default="1"/>
-    <arg name="z" default="1"/>
+    <arg name="z" default="4"/>
     <arg name="R" default="0"/>
     <arg name="P" default="0"/>
     <arg name="Y" default="0"/>
@@ -54,7 +54,28 @@
         <arg name="tgt_system" value="$(arg tgt_system)" />
         <arg name="tgt_component" value="$(arg tgt_component)" />
     </include>
-    <node pkg="tf" type="static_transform_publisher" name="drone2cam_cast" args="0.1 0.0 0.0 0.0 0.0 0.0 base_link color 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="drone2cam_cast" args="0.1 0.0 0.0 0.0 0.0 0.0 base color 100"/>
+
+    	<!-- Load the URDF into the parameter server -->
+	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find flipkart)/models/irpaan_car.urdf.xacro'" />
+	<!-- Spin up the node that will spawn the robot model is defined in the URDF -->
+	<node 
+		name="spawn_gazebo_model" 
+		pkg="gazebo_ros" 
+		type="spawn_model" 
+		args="-urdf -param robot_description -model car -x 0.3 -y 1 -z 0.779"
+        output="screen"   
+	/> 
+
+	<rosparam command="load" file="$(find flipkart)/config/controller.yaml" />
+  	<node name="controller_spawner" pkg="controller_manager" type="spawner" args="robot_joint_publisher robot_velocity_controller"/>
+
+	  <!-- Robot state publisher -->
+	<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+		<param name="publish_frequency" type="double" value="50.0" />
+		<param name="tf_prefix" type="string" value="" />
+	</node>
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
     
     <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -file $(arg sdf) -model $(arg vehicle) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
 </launch>

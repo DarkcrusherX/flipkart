@@ -1,0 +1,27 @@
+<launch>
+<!-- Start up simulated world -->
+	<include file="$(find gazebo_ros)/launch/empty_world.launch"/>
+	<param name="use_gui" value="false"/>
+
+	<!-- Load the URDF into the parameter server -->
+	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find flipkart)/models/irpaan_car.urdf.xacro'" />
+	<!-- Spin up the node that will spawn the robot model is defined in the URDF -->
+	<node 
+		name="spawn_gazebo_model" 
+		pkg="gazebo_ros" 
+		type="spawn_model" 
+		args="-urdf -param robot_description -model car -x -0.4 -z 0.779"
+        output="screen"   
+	/> 
+
+	<rosparam command="load" file="$(find car)/config/controller.yaml" />
+  	<node name="controller_spawner" pkg="controller_manager" type="spawner" args="robot_joint_publisher robot_velocity_controller"/>
+
+	  <!-- Robot state publisher -->
+	<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+		<param name="publish_frequency" type="double" value="50.0" />
+		<param name="tf_prefix" type="string" value="" />
+	</node>
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+</launch>
