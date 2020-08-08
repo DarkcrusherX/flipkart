@@ -6,7 +6,7 @@
     </include>
 
     <include>
-      <uri>/home/ahal/catkin_ws/src/flipkart/models/realsense_camera</uri>
+      <uri>/home/ahal/catkin_ws/src/flipkart/models/depth_camera</uri>
       <pose>0.1 0 0 0 0 0</pose>
     </include>
     <joint name="depth_camera_joint" type="revolute">

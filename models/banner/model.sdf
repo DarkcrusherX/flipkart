@@ -28,8 +28,8 @@
         </geometry>
         <material>
           <script>
-            <uri>file://materials/scripts</uri>
-            <uri>file://materials/texture/flipkart.jpg</uri>
+            <uri>model://banner/materials/scripts</uri>
+            <uri>model://banner/materials/texture/flipkart.jpg</uri>
             <name>flipkart/banner</name>
           </script>
           <shader type='pixel'>

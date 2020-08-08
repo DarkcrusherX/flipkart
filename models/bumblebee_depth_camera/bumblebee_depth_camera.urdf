@@ -257,7 +257,7 @@
     <visual name="depth_camera_visual">
       <origin rpy="0  0  0" xyz="0  0  0"/>
       <geometry>
-        <mesh filename="package://flipkart/models/meshes/realsense.dae" scale="1.0 1.0 1.0"/>
+        <mesh filename="package://flipkart/models/realsense_camera/meshes/realsense.dae" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>

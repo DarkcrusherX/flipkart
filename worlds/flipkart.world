@@ -11582,8 +11582,8 @@
             </geometry>
             <material>
               <script>
-                <uri>file://banner/materials/scripts</uri>
-                <uri>file://banner/materials/texture/flipkart.jpg</uri>
+                <uri>model://banner/materials/scripts</uri>
+                <uri>model://banner/materials/texture/flipkart.jpg</uri>
                 <name>flipkart/banner</name>
               </script>
               <shader type='pixel'>

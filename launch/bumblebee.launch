@@ -15,7 +15,7 @@
     <arg name="fcu_url" default="udp://:14540@localhost:14557"/>
     <arg name="world" default="$(find flipkart)/worlds/flipkart.world"/>
     <!-- <arg name="sdf" default="$(find flipkart)/models/iris_realsense/iris_realsense.sdf"/> -->
-    <arg name="sdf" default="$(find flipkart)/models/bumblebee_depth_camera/bumblebee_realsense_camera.sdf"/>
+    <arg name="sdf" default="$(find flipkart)/models/bumblebee_depth_camera/bumblebee_depth_camera.sdf"/>
 
     <env name="PX4_SIM_MODEL" value="$(arg vehicle)" />
     <env name="PX4_ESTIMATOR" value="$(arg est)" />
