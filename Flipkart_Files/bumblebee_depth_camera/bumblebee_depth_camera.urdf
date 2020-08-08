@@ -85,7 +85,7 @@
     <visual name="base_link_inertia_visual">
       <origin rpy="1.57079  0       0" xyz="0     0     0.015"/>
       <geometry>
-        <mesh filename="package://px4/Tools/sitl_gazebo/models/rotors_description/meshes/bumblebee.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rotors_gazebo/models/rotors_description/meshes/bumblebee.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
   </link>

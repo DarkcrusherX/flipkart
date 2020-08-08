@@ -2,11 +2,11 @@
 <sdf version="1.5">
   <model name='bumblebee_depth_camera'>
     <include>
-      <uri>model://bumblebee</uri>
+      <uri>/home/ahal/catkin_ws/src/flipkart/models/bumblebee</uri>
     </include>
 
     <include>
-      <uri>model://depth_camera</uri>
+      <uri>/home/ahal/catkin_ws/src/flipkart/models/realsense_camera</uri>
       <pose>0.1 0 0 0 0 0</pose>
     </include>
     <joint name="depth_camera_joint" type="revolute">

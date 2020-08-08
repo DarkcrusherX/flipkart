@@ -39,7 +39,7 @@
     </joint>
 
     <include>
-      <uri>/home/ahal/catkin_ws/src/flipkart/models/rplidar</uri>
+      <uri>model://rplidar</uri>
       <pose>0 0 0.1 0 0 0</pose>
     </include>
     <joint name="rplidar_joint" type="revolute">

@@ -85,7 +85,7 @@
     <visual name="base_link_inertia_visual">
       <origin rpy="1.57079  0       0" xyz="0     0     0.015"/>
       <geometry>
-        <mesh filename="package://px4/Tools/sitl_gazebo/models/rotors_description/meshes/bumblebee.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://flipkart/models/meshes/bumblebee.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
   </link>
@@ -111,7 +111,7 @@
     <visual name="rotor_0_visual">
       <origin rpy="0  0  0" xyz="0  0  0"/>
       <geometry>
-        <mesh filename="package://rotors_gazebo/models/rotors_description/meshes/iris_prop_ccw.dae" scale="1 1 1"/>
+        <mesh filename="package://flipkart/models/meshes/iris_prop_ccw.dae" scale="1 1 1"/>
       </geometry>
     </visual>
   </link>
@@ -130,7 +130,7 @@
     <visual name="rotor_4_visual">
       <origin rpy="0  0  0" xyz="0  0  0"/>
       <geometry>
-        <mesh filename="package://rotors_gazebo/models/rotors_description/meshes/iris_prop_cw.dae" scale="1 1 1"/>
+        <mesh filename="package://flipkart/models/meshes/iris_prop_cw.dae" scale="1 1 1"/>
       </geometry>
     </visual>
   </link>
@@ -149,7 +149,7 @@
     <visual name="rotor_1_visual">
       <origin rpy="0  0  0" xyz="0  0  0"/>
       <geometry>
-        <mesh filename="package://rotors_gazebo/models/rotors_description/meshes/iris_prop_ccw.dae" scale="1 1 1"/>
+        <mesh filename="package://flipkart/models/meshes/iris_prop_ccw.dae" scale="1 1 1"/>
       </geometry>
     </visual>
   </link>
@@ -168,7 +168,7 @@
     <visual name="rotor_5_visual">
       <origin rpy="3.14  0    0" xyz="0  0  0"/>
       <geometry>
-        <mesh filename="package://rotors_gazebo/models/rotors_description/meshes/iris_prop_cw.dae" scale="1 1 1"/>
+        <mesh filename="package://flipkart/models/meshes/iris_prop_cw.dae" scale="1 1 1"/>
       </geometry>
     </visual>
   </link>
@@ -187,7 +187,7 @@
     <visual name="rotor_2_visual">
       <origin rpy="0  0  0" xyz="0  0  0"/>
       <geometry>
-        <mesh filename="package://rotors_gazebo/models/rotors_description/meshes/iris_prop_cw.dae" scale="1 1 1"/>
+        <mesh filename="package://flipkart/models/meshes/iris_prop_cw.dae" scale="1 1 1"/>
       </geometry>
     </visual>
   </link>
@@ -206,7 +206,7 @@
     <visual name="rotor_6_visual">
       <origin rpy="3.14  0    0" xyz="0  0  0"/>
       <geometry>
-        <mesh filename="package://rotors_gazebo/models/rotors_description/meshes/iris_prop_ccw.dae" scale="1 1 1"/>
+        <mesh filename="package://flipkart/models/meshes/iris_prop_ccw.dae" scale="1 1 1"/>
       </geometry>
     </visual>
   </link>
@@ -225,7 +225,7 @@
     <visual name="rotor_3_visual">
       <origin rpy="0  0  0" xyz="0  0  0"/>
       <geometry>
-        <mesh filename="package://rotors_gazebo/models/rotors_description/meshes/iris_prop_cw.dae" scale="1 1 1"/>
+        <mesh filename="package://flipkart/models/meshes/iris_prop_cw.dae" scale="1 1 1"/>
       </geometry>
     </visual>
   </link>
@@ -244,7 +244,7 @@
     <visual name="rotor_7_visual">
       <origin rpy="3.14  0    0" xyz="0  0  0"/>
       <geometry>
-        <mesh filename="package://rotors_gazebo/models/rotors_description/meshes/iris_prop_ccw.dae" scale="1 1 1"/>
+        <mesh filename="package://flipkart/models/meshes/iris_prop_ccw.dae" scale="1 1 1"/>
       </geometry>
     </visual>
   </link>
@@ -257,7 +257,7 @@
     <visual name="depth_camera_visual">
       <origin rpy="0  0  0" xyz="0  0  0"/>
       <geometry>
-        <mesh filename="package://px4/Tools/sitl_gazebo/models/realsense_camera/meshes/realsense.dae" scale="1.0 1.0 1.0"/>
+        <mesh filename="package://flipkart/models/meshes/realsense.dae" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>
