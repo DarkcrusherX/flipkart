@@ -11,7 +11,6 @@ from geometry_msgs.msg import Point, PoseStamped
 from mavros_msgs.srv import CommandTOL
 from std_msgs.msg import String
 import smach_ros
-import smach_viewer
 
 ## Global Variables
 # FCU Connection State
@@ -29,20 +28,18 @@ def pos_cb(poseStamped):
 setpoint = PositionTarget()
 setpoint.coordinate_frame = PositionTarget.FRAME_LOCAL_NED
 setpoint.type_mask = PositionTarget.IGNORE_AFX | PositionTarget.IGNORE_AFY | PositionTarget.IGNORE_AFZ | PositionTarget.IGNORE_YAW_RATE
+setpoint.yaw = 0
 
 # distance function
 def DistToGoal():
-  p1 = [current_pose.pose.position.x, current_pose.pose.position.y, current_pose.pose.position.z]
-  p2 = [setpoint.position.x, setpoint.position.y, setpoint.position.z]
-  distance = math.sqrt( ((p1[0]-p2[0])**2) + ((p1[1]-p2[1])**2) + ((p1[2]-p2[2])**2) )
-  return distance
-  # return math.dist([current_pose.pose.position.x, current_pose.pose.position.y, current_pose.pose.position.z],[setpoint.position.x, setpoint.position.y, setpoint.position.z])
+  return math.dist([current_pose.pose.position.x, current_pose.pose.position.y, current_pose.pose.position.z],[setpoint.position.x, setpoint.position.y, setpoint.position.z])
 
 # Hoops Lookup Table
 hoops = [1, 0, 2, -1, -1.5, 0.5, -1.5, 1.5, -1.5, 1, -0.5, 2, 0, -1, 1]
 counter = 0
 y_off = -0.10
 x_off = 0.05
+z_off = -0.1
 
 ## Publsiher and Subscriber Objects
 state_sub = rospy.Subscriber("mavros/state", State, state_cb)
@@ -63,7 +60,7 @@ class Takeoff(smach.State):
     SM_pub.publish(String("Takeoff"))
 
     global setpoint
-    setpoint.position = Point(1+x_off, 0+y_off, 3)
+    setpoint.position = Point(1+x_off, 0+y_off, 3+z_off)
     setpoint.velocity = Point(0, 0, 0)
     reachedFlag = False
     
@@ -71,12 +68,12 @@ class Takeoff(smach.State):
       local_pos_pub.publish(setpoint)
       
       if not reachedFlag:
-        if DistToGoal() < 0.1:
+        if abs(current_pose.pose.position.z - 3-z_off) < 0.1:
           reachedFlag = True
           reachTime = rospy.get_rostime()
 
       if reachedFlag:
-        if (rospy.get_rostime() - reachTime > rospy.Duration(1.0)):
+        if (rospy.get_rostime() - reachTime > rospy.Duration(3.0)):
           return 'GoToYScan'
 
       userdata.rate.sleep()
@@ -84,7 +81,7 @@ class Takeoff(smach.State):
 class Yscan(smach.State):
   def __init__(self):
     smach.State.__init__(self,
-                        outcomes=['Alignment'],
+                        outcomes=['Allignment'],
                         input_keys=['rate'],
                         output_keys=['rate'])
 
@@ -92,7 +89,7 @@ class Yscan(smach.State):
     SM_pub.publish(String("Yscan"))
     global setpoint
     setpoint.type_mask = setpoint.type_mask | PositionTarget.IGNORE_PX | PositionTarget.IGNORE_PY | PositionTarget.IGNORE_PZ
-    setpoint.position = Point(counter + 1 + x_off, hoops[counter] + y_off, 3)
+    setpoint.position = Point(counter + 1 + x_off, hoops[counter] + y_off, 3+z_off)
     setpoint.velocity = Point(0, -0.5, 0)
     if (current_pose.pose.position.y < hoops[counter]):
       toReverse = True
@@ -118,7 +115,7 @@ class Yscan(smach.State):
       
       else :
         if (rospy.get_rostime() - reachTime > rospy.Duration(3.0)):
-          return 'Alignment'
+          return 'Allignment'
       
       userdata.rate.sleep()
 
@@ -135,7 +132,7 @@ class Boost(smach.State):
     global counter
     setpoint.type_mask = setpoint.type_mask | PositionTarget.IGNORE_PX | PositionTarget.IGNORE_PY | PositionTarget.IGNORE_PZ
     setpoint.velocity = Point(0.5, 0, 0)
-    setpoint.position = Point(counter+2+x_off, hoops[counter]+y_off, 3)
+    setpoint.position = Point(counter+2+x_off, hoops[counter]+y_off, 3+z_off)
     reachedFlag = False
 
     while not rospy.is_shutdown():
@@ -144,7 +141,7 @@ class Boost(smach.State):
           reachedFlag = True
           setpoint.type_mask = setpoint.type_mask ^ PositionTarget.IGNORE_PX ^ PositionTarget.IGNORE_PY ^ PositionTarget.IGNORE_PZ
           if counter == 14:
-            setpoint.position = Point(counter+2+x_off+2, 0+y_off, 3)
+            setpoint.position = Point(counter+2+x_off+2, 0+y_off, +z_off)
           setpoint.velocity = Point(0, 0, 0)
           counter=counter+1
           reachTime = rospy.get_rostime()
@@ -152,6 +149,7 @@ class Boost(smach.State):
       if reachedFlag:
         if counter == 15:
           if (rospy.get_rostime() - reachTime > rospy.Duration(3.0)):
+            SM_pub.publish(String("Land"))
             return 'Land'
         elif (rospy.get_rostime() - reachTime > rospy.Duration(1.0)):
             return 'GoToYScan'
@@ -177,9 +175,9 @@ def main():
   with sm:
     # Add states to the container
     smach.StateMachine.add('TAKEOFF', Takeoff(), transitions={'GoToYScan': 'YSCAN'})
-    smach.StateMachine.add('YSCAN', Yscan(), transitions={'Alignment': 'BOOST'})
+    smach.StateMachine.add('YSCAN', Yscan(), transitions={'Allignment': 'BOOST'})
     smach.StateMachine.add('BOOST', Boost(), transitions={'GoToYScan': 'YSCAN'})
-
+  
   sis = smach_ros.IntrospectionServer('Grid', sm, '/StateMachine')
   sis.start()
   

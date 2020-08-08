@@ -30,10 +30,10 @@ def disp_img(fname, frame):
 
 def show_image(frame):
     global curr_pose, img_h, img_w, px, py, color_img_t
-    # disp_img("org",frame*15)
+    disp_img("org",frame*15)
     image = dbridge1.imgmsg_to_cv2(color_img_t,desired_encoding='bgr8')
-
-    frame1 = np.where(frame<4,frame,0)
+    print(np.unique(frame,return_counts = True))
+    frame1 = np.where(frame<5,frame,0)
     depth_val = 0
 
     depth_colormap = cv2.applyColorMap(frame1, cv2.COLORMAP_JET)
