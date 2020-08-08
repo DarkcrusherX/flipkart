@@ -4,6 +4,16 @@
       <uri>model://iris</uri>
     </include>
     
+    <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>50.0</updateRate>
+      <bodyName>iris::base_link</bodyName>
+      <topicName>ground_truth/state</topicName>
+      <gaussianNoise>0.01</gaussianNoise>
+      <frameName>world</frameName>
+      <xyzOffsets>0 0 0</xyzOffsets>
+      <rpyOffsets>0 0 0</rpyOffsets>
+    </plugin>
 
     <plugin name="r200" filename="librealsense_gazebo_plugin.so"/>
     <pose frame="">0 0 0.015 0 0 0</pose>
@@ -90,7 +100,7 @@
       <sensor name="color" type="camera">
         <pose frame="">0 -0.046 0.004 0 0 0</pose>
         <camera name="__default__">
-          <horizontal_fov>1.047</horizontal_fov>
+          <horizontal_fov>1.9</horizontal_fov>
           <image>
             <width>640</width>
             <height>480</height>
@@ -113,7 +123,7 @@
       <sensor name="ired1" type="camera">
         <pose frame="">0 -0.06 0.004 0 0 0</pose>
         <camera name="__default__">
-          <horizontal_fov>1.047</horizontal_fov>
+          <horizontal_fov>1.9</horizontal_fov>
           <image>
             <width>640</width>
             <height>480</height>
@@ -136,7 +146,7 @@
       <sensor name="ired2" type="camera">
         <pose frame="">0 0.01 0.004 0 0 0</pose>
         <camera name="__default__">
-          <horizontal_fov>1.047</horizontal_fov>
+          <horizontal_fov>1.9</horizontal_fov>
           <image>
             <width>640</width>
             <height>480</height>
@@ -159,7 +169,7 @@
       <sensor name="depth" type="depth">
         <pose frame="">0 -0.03 0.004 0 0 0</pose>
         <camera name="__default__">
-          <horizontal_fov>1.047</horizontal_fov>
+          <horizontal_fov>1.9</horizontal_fov>
           <image>
             <width>640</width>
             <height>480</height>
