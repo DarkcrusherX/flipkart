@@ -7,7 +7,7 @@
 
     <include>
       <uri>/home/ahal/catkin_ws/src/flipkart/models/depth_camera</uri>
-      <pose>0.1 0 0 0 0 0</pose>
+      <pose>0.3 0 0 0 0 0</pose>
     </include>
     <joint name="depth_camera_joint" type="revolute">
       <child>depth_camera::link</child>

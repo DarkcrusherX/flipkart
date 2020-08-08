@@ -19,7 +19,7 @@
     <plugin name="r200" filename="librealsense_gazebo_plugin.so"/>
     <pose frame="">0 0 0.015 0 0 0</pose>
     <link name="link">
-    <pose>0.24 0 0 0 0 0</pose>
+    <pose>0.3 0 0 0 0 0</pose>
       <inertial>
         <mass>0.0615752</mass>
         <inertia>
