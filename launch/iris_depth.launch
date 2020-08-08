@@ -10,12 +10,12 @@
     <arg name="P" default="0"/>
     <arg name="Y" default="0"/>
     <!-- vehicle model and world -->
-    <arg name="vehicle" default="iris"/>
+    <arg name="vehicle" default="iris_realsense"/>
     <arg name="est" default="ekf2"/>
     <arg name="fcu_url" default="udp://:14540@localhost:14557"/>
     <arg name="world" default="$(find flipkart)/worlds/flipkart.world"/>
     <!-- <arg name="sdf" default="$(find flipkart)/models/iris_realsense/iris_realsense.sdf"/> -->
-    <arg name="sdf" default="$(find mavlink_sitl_gazebo)/models/$(arg vehicle)/$(arg vehicle).sdf"/>
+    <arg name="sdf" default="$(find flipkart)/models/$(arg vehicle)/$(arg vehicle).sdf"/>
 
     <env name="PX4_SIM_MODEL" value="$(arg vehicle)" />
     <env name="PX4_ESTIMATOR" value="$(arg est)" />
