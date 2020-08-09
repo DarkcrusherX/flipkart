@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 import rospy
 from sensor_msgs.msg import Image
 import cv2
@@ -14,6 +16,7 @@ scale_factor = 1/3.78
 curr_pose = PoseStamped() 
 state = String()
 state.data = "Intialiazing" 
+prev_state = "Intialiazing" 
 color_img_t = Image()
 
 img_h = 480
@@ -24,15 +27,17 @@ d_hoop = 0.8 ## distance from hoop we will be doing y scan at
 px = h_fov*d_hoop/img_w
 py = v_fov*d_hoop/img_h
 
+hoop_counter = 0 
+
 def disp_img(fname, frame):
     cv2.namedWindow(fname,cv2.WINDOW_NORMAL)
     cv2.imshow(fname,frame)
 
 def show_image(frame):
-    global curr_pose, img_h, img_w, px, py, color_img_t
+    global curr_pose, img_h, img_w, px, py, color_img_t, hoop_counter
     disp_img("org",frame*15)
     image = dbridge1.imgmsg_to_cv2(color_img_t,desired_encoding='bgr8')
-    print(np.unique(frame,return_counts = True))
+    # print(np.unique(frame,return_counts = True))
     frame1 = np.where(frame<5,frame,0)
     depth_val = 0
 
@@ -74,14 +79,16 @@ def show_image(frame):
         area = cv2.contourArea(box)
         x,y,w,h = cv2.boundingRect(approx)
 
-        print(x,y,w,h, " - ", (float(h/w))-0.55)
-        print(h/w)
+        # print(x,y,w,h, " - ", (float(h/w))-0.55)
+        # print(h/w)
         # if abs(h/w - 0.55) <= 0.1 :
         #     cv2.rectangle(color_img,(x,y),(x+w,y+h),(0,255,0),2)
 
         val_w = 390
         val_h = 100000
-
+        if (w-1)==0  or (h-1)==0:
+            continue
+         
         if area/( (w-1)*(h-1) ) == 1:
             ## this means a perfect rectangle
             # print("pr",x,y,w,h)
@@ -132,9 +139,11 @@ def show_image(frame):
             msg.data = y_h
             point_pub.publish(y_h)
 
-    cv2.putText(image,"Delta_x {}".format(rel_coords_x), (400,100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,255), 1)
-    cv2.putText(image,"Delta_y {}".format(rel_coords_y), (400,130), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,255), 1)
+    cv2.putText(image,"Delta_x {}".format(rel_coords_x/10), (400,100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,255), 1)
+    cv2.putText(image,"Delta_y {}".format(rel_coords_y/10), (400,130), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,255), 1)
     cv2.putText(image,state.data, (400,400), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,255), 6)
+    cv2.putText(image,"Hoops Passed {}".format(hoop_counter), (40,40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 4)
+
 
     disp_img("Frame", color_img)
     disp_img("Color frame", image)
@@ -168,7 +177,10 @@ def color_image_callback(img_msg1):
     color_img_t = img_msg1 
 
 def state_cbk(data):
-    global state
+    global state, prev_state, hoop_counter
+    ## Increase after passing through hoop
+    if state.data=="Boost" and (data.data=="Yscan" or data.data=="Land"):
+        hoop_counter += 1
     state = data
 
 sub_image = rospy.Subscriber("/r200/camera/depth/image_raw", Image, image_callback)
