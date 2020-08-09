@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 import rospy
 from gazebo_msgs.msg import ModelStates
 from geometry_msgs.msg import Pose
@@ -24,7 +25,7 @@ def pos_callback(pos_msg):
   pos.pose.orientation.y = round(position.orientation.y,12)
   pos.pose.orientation.z = round(position.orientation.z,12)
   pos.pose.orientation.w = round(position.orientation.w,12)
-  print(pos)
+  # print(pos)
   pub_pos.publish(pos)
 
 

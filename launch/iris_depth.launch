@@ -70,6 +70,7 @@
     
     <node type="rviz" name="rviz" pkg="rviz" args="-d $(find flipkart)/rviz/quad_sim.rviz" />
 
+    <node name="t265" pkg="flipkart" type="localposition.py" output="screen"/>
     <node name="vio_data" pkg="flipkart" type="conv.py" output="screen"/>
     <node name="controller" pkg="flipkart" type="controller.py" output="screen"/>
     <node name="cv_code" pkg="flipkart" type="depth_sim.py" output="screen"/>

@@ -36,13 +36,13 @@
       <enable_wind>0</enable_wind>
       <kinematic>0</kinematic>
       <gravity>1</gravity>
-      <visual name="visual">
+      <!-- <visual name="visual">
         <geometry>
           <mesh>
             <uri>model://realsense_camera/meshes/realsense.dae</uri>
           </mesh>
         </geometry>
-      </visual>
+      </visual> -->
       <collision name='collision'>
         <laser_retro>0</laser_retro>
         <max_contacts>10</max_contacts>
@@ -119,7 +119,7 @@
         </camera>
         <always_on>1</always_on>
         <update_rate>60</update_rate>
-        <visualize>1</visualize>
+        <visualize>0</visualize>
       </sensor>
       <sensor name="ired1" type="camera">
         <pose frame="">0 -0.06 0.004 0 0 0</pose>
